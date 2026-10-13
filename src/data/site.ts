@@ -1,9 +1,9 @@
 export const site = {
   fullName: "Hanifah Dwi Setyowati",
   displayName: "Hanifah Dwi",
-  heroTitle: "Hani's Library", 
+  heroTitle: "Hanifah Dwi Setyowati", 
   initial: "H",
-  tagline: "Stories, Tech, and Creativity",
+  tagline: "Turning ideas into systems, and plans into events.",
   email: "dwihanifahs@gmail.com",
   github: "https://github.com/hanifahdwis",
   linkedin: "https://id.linkedin.com/in/hanifahdwis",
