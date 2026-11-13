@@ -1,54 +1,34 @@
-
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/sections/Hero";
 import AboutMe from "@/components/sections/About";
+import Projects from "@/components/sections/Projects";
+import Contact from "@/components/sections/Contact";
 
-const sections = [
-  {
-    id: "portfolio",
-    title: "Projects I've Done",
-    style: "bg-dickens text-parchment",
-  },
-  {
-    id: "roles",
-    title: "Role & Tech Stack",
-    style: "bg-shakespeare text-ink",
-  },
-  {
-    id: "more",
-    title: "More About Me",
-    style: "bg-mahogany text-parchment",
-  },
-  {
-    id: "contact",
-    title: "Contact",
-    style: "bg-ink text-parchment",
-  },
+const placeholders = [
+  { id: "roles", title: "Role & Tech Stack", style: "bg-shakespeare text-ink" },
+  { id: "more", title: "More About Me", style: "bg-mahogany text-parchment" },
 ];
 
 export default function Home() {
   return (
     <>
       <Navbar />
-
       <main>
         <Hero />
-
-        {/* About Me section */}
         <AboutMe />
+        <Projects />
 
-        {/* Other sections — developed later */}
-        {sections.map((section) => (
+        {placeholders.map((s) => (
           <section
-            key={section.id}
-            id={section.id}
-            className={`grain layer flex min-h-screen scroll-mt-16 items-center justify-center ${section.style}`}
+            key={s.id}
+            id={s.id}
+            className={`grain layer flex min-h-screen scroll-mt-16 items-center justify-center ${s.style}`}
           >
-            <h2 className="font-display text-4xl">
-              {section.title}
-            </h2>
+            <h2 className="font-display text-4xl">{s.title}</h2>
           </section>
         ))}
+
+        <Contact />
       </main>
     </>
   );

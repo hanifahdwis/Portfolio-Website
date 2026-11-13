@@ -8,7 +8,7 @@ export const site = {
   github: "https://github.com/hanifahdwis",
   linkedin: "https://id.linkedin.com/in/hanifahdwis",
   photo: "/images/foto-profil.jpeg",
-  campusLogo: "/images/logo-kampus.",
+  campusLogo: "/images/logo-kampus.png",
 };
 
 export const shelfLabels = [

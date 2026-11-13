@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 const COLORS = ["#B76F61", "#C5A36A", "#6F9187", "#D98B6F", "#D8C6A8", "#713E3B", "#C5A36A", "#6F9187"];
 const BANDS = ["#D8C6A8", "#713E3B", "#6F9187"];
@@ -13,42 +13,62 @@ function makeRng(seed: number) {
   };
 }
 
+// Tiap buku dapat gerakan, durasi, dan jeda sendiri (deterministik, aman untuk SSR)
+const KINDS = ["peek", "rock", "breathe", "", ""] as const;
+function idle(idx: number): { className: string; style: CSSProperties } {
+  return {
+    className: `book-idle ${KINDS[(idx * 7 + 3) % 5]}`,
+    style: {
+      animationDuration: `${7 + ((idx * 13) % 7)}s`,
+      animationDelay: `-${(idx * 37) % 11}s`,
+    },
+  };
+}
+
 type Band = { top: number; h: number; color: string };
 type Item =
   | { kind: "stack" }
   | { kind: "book"; w: number; h: number; color: string; ex: number; band: Band | null };
 
 function Book({
-  x, y, w, h, color, band,
-}: { x: number; y: number; w: number; h: number; color: string; band: Band | null }) {
+  x, y, w, h, color, band, idx,
+}: { x: number; y: number; w: number; h: number; color: string; band: Band | null; idx: number }) {
+  const a = idle(idx);
   return (
-    <g>
-      <rect x={f(x)} y={f(y - h)} width={f(w)} height={f(h)} rx={1} fill={color} />
-      <rect x={f(x + w - 2.5)} y={f(y - h)} width={2.5} height={f(h)} fill="#000" opacity={0.13} />
-      {band && (
-        <rect
-          x={f(x)}
-          y={f(y - h + h * band.top)}
-          width={f(w)}
-          height={f(band.h)}
-          fill={band.color}
-          opacity={0.85}
-        />
-      )}
+    <g className="book-hit">
+      {/* area hover yang diam, supaya tidak berkedip saat buku bergerak */}
+      <rect x={f(x)} y={f(y - h)} width={f(w)} height={f(h)} fill="transparent" />
+      <g className="book-lift">
+        <g className={a.className} style={a.style}>
+          <rect x={f(x)} y={f(y - h)} width={f(w)} height={f(h)} rx={1} fill={color} />
+          <rect x={f(x + w - 2.5)} y={f(y - h)} width={2.5} height={f(h)} fill="#000" opacity={0.13} />
+          {band && (
+            <rect
+              x={f(x)}
+              y={f(y - h + h * band.top)}
+              width={f(w)}
+              height={f(band.h)}
+              fill={band.color}
+              opacity={0.85}
+            />
+          )}
+        </g>
+      </g>
     </g>
   );
 }
 
-function Stack({ x, y }: { x: number; y: number }) {
+function Stack({ x, y, idx }: { x: number; y: number; idx: number }) {
   const layers = [
     [68, "#B76F61"],
     [62, "#D8C6A8"],
     [58, "#713E3B"],
     [52, "#6F9187"],
   ] as const;
+  const a = idle(idx);
   let cur = y;
   return (
-    <g>
+    <g className={`${a.className} rock`} style={a.style}>
       {layers.map(([w, c], i) => {
         const top = cur - 11;
         cur -= 11.5;
@@ -95,16 +115,17 @@ function buildRow(
   const k = (span - fixed) / flex;
   let x = 68;
   const out: ReactNode[] = [];
+  const offset = prefix === "b" ? 50 : 0;
 
   items.forEach((it, j) => {
     const key = `${prefix}-${j}`;
     if (it.kind === "stack") {
-      out.push(<Stack key={key} x={x + 2} y={y} />);
+      out.push(<Stack key={key} x={x + 2} y={y} idx={j + offset} />);
       x += 76;
       return;
     }
     const w = it.w * k;
-    const book = <Book x={x} y={y} w={w} h={it.h} color={it.color} band={it.band} />;
+    const book = <Book x={x} y={y} w={w} h={it.h} color={it.color} band={it.band} idx={j + offset} />;
     if (j === tiltIdx) {
       out.push(
         <g key={key} transform={`rotate(${tiltAng} ${f(x)} ${y})`}>
