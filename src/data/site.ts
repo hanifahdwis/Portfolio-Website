@@ -7,6 +7,8 @@ export const site = {
   email: "dwihanifahs@gmail.com",
   github: "https://github.com/hanifahdwis",
   linkedin: "https://id.linkedin.com/in/hanifahdwis",
+  photo: "/images/foto-profil.jpeg",
+  campusLogo: "/images/logo-kampus.",
 };
 
 export const shelfLabels = [
