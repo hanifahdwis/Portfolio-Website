@@ -7,7 +7,7 @@ import { site } from "@/data/site";
 const links = [
   { id: "about", label: "About" },
   { id: "portfolio", label: "Projects" },
-  { id: "roles", label: "Roles" },
+  { id: "skills", label: "Skills" },
   { id: "contact", label: "Contact" },
 ];
 
@@ -32,7 +32,7 @@ export default function Navbar() {
     <>
       <motion.div
         style={{ scaleX: progress }}
-        className="fixed inset-x-0 top-0 z-[60] h-0.5 origin-left bg-gold"
+        className="fixed inset-x-0 top-0 z-60 h-0.5 origin-left bg-gold"
       />
       <header className="fixed inset-x-0 top-4 z-50 flex justify-center px-4">
         <nav className="flex items-center gap-1 rounded-full border border-parchment/15 bg-ink/70 p-1.5 shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-md">

@@ -3,6 +3,17 @@ import type { Project } from "@/types";
 const GH = "https://github.com/hanifahdwis"; 
 
 export const projects: Project[] = [
+    {
+    title: "Kiddio",
+    subtitle: "AI Parenting Assistant",
+    description:
+      "Designed the UI and built the frontend of an AI-powered parenting companion with 8 pages, including a chat interface with history, quick-topic shortcuts, child profile setup, and AI communication style selection, integrated with REST API endpoints and JWT authentication.",
+    tags: ["Next.js", "React", "Tailwind CSS", "UI Design"],
+    year: 2026,
+    kind: "code",
+    featured: true,
+    githubUrl: GH,
+  },
   {
     title: "DoneIt",
     subtitle: "Gamified Campus Quest Platform",

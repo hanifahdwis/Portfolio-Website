@@ -3,7 +3,6 @@ export const site = {
   displayName: "Hanifah Dwi",
   heroTitle: "Hanifah Dwi Setyowati", 
   initial: "H",
-  tagline: "Turning ideas into systems, and plans into events.",
   email: "dwihanifahs@gmail.com",
   github: "https://github.com/hanifahdwis",
   linkedin: "https://id.linkedin.com/in/hanifahdwis",
