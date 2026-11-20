@@ -1,7 +1,5 @@
 import type { Entry } from "@/types";
 
-// photo & photoAlt opsional. Contoh:
-// photo: "/images/journey/schematics.jpg", photoAlt: "Schematics BST team"
 export type JourneyEntry = Entry & { photo?: string; photoAlt?: string };
 
 export const journey: JourneyEntry[] = [
@@ -15,6 +13,8 @@ export const journey: JourneyEntry[] = [
     label: "Aug 2024",
     title: "Started at ITS",
     description: "Began studying Software Engineering.",
+    photo: "/images/journey/its.jpg",
+    photoAlt: "Me at ITS",
   },
   {
     label: "2025",
@@ -26,6 +26,8 @@ export const journey: JourneyEntry[] = [
     label: "Jun – Aug 2025",
     title: "Community & Campus",
     description: "Volunteered at Socare and served as operational staff at OKKBK.",
+    photo: "/images/journey/community.jpg",
+    photoAlt: "Socare and OKKBK activities",
   },
   {
     label: "2026",
@@ -42,5 +44,7 @@ export const journey: JourneyEntry[] = [
     label: "May – Sep 2026",
     title: "Schematics BST",
     description: "Expert Staff for a bootcamp with 300+ participants.",
+    photo: "/images/journey/schematics.jpg",
+    photoAlt: "Schematics BST team",
   },
 ];

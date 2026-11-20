@@ -1,8 +1,19 @@
 import type { Entry } from "@/types";
 
 export const interests: Entry[] = [
-  { label: "01", title: "Software Design", description: "Structuring systems so they are clear and maintainable." },
-  { label: "02", title: "Dev Methodologies", description: "How teams plan, build, and ship software well." },
-  { label: "03", title: "Project Coordination", description: "Keeping people, tasks, and timelines in sync." },
-  { label: "04", title: "Event Logistics", description: "Making sure everything runs smoothly on the day." },
+  {
+    label: "01",
+    title: "Software design",
+    description: "Figuring out how to structure an app so it stays easy to change later.",
+  },
+  {
+    label: "02",
+    title: "How teams build software",
+    description: "Learning how teams plan and ship, and trying those ideas in my own projects.",
+  },
+  {
+    label: "03",
+    title: "Coordinating a team",
+    description: "Keeping timelines and documents clear so everyone knows what comes next.",
+  },
 ];

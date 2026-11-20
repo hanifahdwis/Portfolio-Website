@@ -1,7 +1,7 @@
 export const site = {
   fullName: "Hanifah Dwi Setyowati",
   displayName: "Hanifah Dwi",
-  heroTitle: "Hanifah Dwi Setyowati", 
+  heroTitle: "Hanifah Dwi Setyowati",
   initial: "H",
   tagline: "Turning ideas into systems, and plans into events.",
   email: "dwihanifahs@gmail.com",
@@ -15,5 +15,4 @@ export const shelfLabels = [
   { text: "Backend Development", href: "#portfolio", x: 28, y: 11 },
   { text: "Web Applications", href: "#portfolio", x: 66, y: 13 },
   { text: "Android Apps", href: "#portfolio", x: 79, y: 37 },
-  { text: "Event Operations", href: "#roles", x: 81, y: 69 },
 ];

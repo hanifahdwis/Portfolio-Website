@@ -30,11 +30,15 @@ export default function Reveal({
   );
 }
 
-export function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) {
+export function SectionHeading({ eyebrow, title }: { eyebrow?: string; title: string }) {
   return (
     <Reveal className="mb-12">
-      <p className="font-label text-[10px] uppercase tracking-[0.2em] opacity-60">{eyebrow}</p>
-      <h2 className="mt-3 font-display text-4xl font-medium sm:text-5xl">{title}</h2>
+      {eyebrow && (
+        <p className="font-label text-[10px] uppercase tracking-[0.2em] opacity-60">{eyebrow}</p>
+      )}
+      <h2 className={`${eyebrow ? "mt-3" : ""} font-display text-4xl font-medium sm:text-5xl`}>
+        {title}
+      </h2>
       <div className="mt-5 h-px w-full bg-current opacity-20" />
     </Reveal>
   );

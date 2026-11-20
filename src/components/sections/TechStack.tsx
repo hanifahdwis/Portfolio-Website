@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 import Reveal, { SectionHeading } from "@/components/ui/Reveal";
 import { techStack } from "@/data/techStack";
 
@@ -25,16 +28,26 @@ export default function TechStack() {
                 {cat}
               </span>
               <div className="rounded-b-md rounded-tr-md bg-card p-5 shadow-md ring-1 ring-ink/5">
-                <ul className="flex flex-wrap gap-2">
+                <ul className="flex flex-wrap gap-2.5">
                   {techStack
                     .filter((t) => t.category === cat)
-                    .map((t) => (
-                      <li
+                    .map((t, i) => (
+                      <motion.li
                         key={t.id}
-                        className="cursor-default rounded-full border border-ink/15 bg-cream/60 px-3.5 py-1.5 text-sm transition-colors hover:border-tolstoy hover:text-tolstoy"
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.03, duration: 0.4 }}
+                        whileHover={{
+                          y: -5,
+                          scale: 1.1,
+                          rotate: -2,
+                          transition: { type: "spring", stiffness: 420, damping: 14 },
+                        }}
+                        className="cursor-default rounded-full border border-ink/15 bg-cream/60 px-3.5 py-1.5 text-sm transition-colors duration-200 hover:border-mahogany hover:bg-mahogany hover:text-parchment hover:shadow-lg"
                       >
                         {t.name}
-                      </li>
+                      </motion.li>
                     ))}
                 </ul>
               </div>

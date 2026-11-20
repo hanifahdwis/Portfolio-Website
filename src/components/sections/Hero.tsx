@@ -15,55 +15,19 @@ export default function Hero() {
     transition: { duration: 0.8, delay, ease },
   });
 
-  // Pecah nama jadi kata -> huruf, simpan nomor urut huruf untuk ritme animasinya
-  let n = 0;
-  const words = site.heroTitle.split(" ").map((word) => ({
-    word,
-    letters: word.split("").map((char) => ({ char, i: n++ })),
-  }));
-
   return (
     <section
       id="top"
       className="grain lamp layer flex min-h-screen flex-col items-center justify-center bg-ink px-4 pb-10 pt-24 text-parchment"
     >
-      {/* Nama: huruf terbalik berurutan seperti halaman buku, berulang pelan */}
-      <h1
-        aria-label={site.heroTitle}
-        className="flex flex-wrap justify-center gap-x-[0.3em] text-center font-display text-5xl font-medium sm:text-7xl"
+      <motion.h1
+        {...fade(0.1)}
+        className="text-center font-display text-5xl font-medium sm:text-7xl"
       >
-        {words.map(({ word, letters }) => (
-          <span key={word} aria-hidden className="inline-block whitespace-nowrap">
-            {letters.map(({ char, i }) => (
-              <motion.span
-                key={i}
-                className="inline-block"
-                initial={reduce ? false : { opacity: 0, y: 14, rotateX: -45 }}
-                animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                transition={{ duration: 0.7, delay: 0.1 + i * 0.04, ease }}
-                style={{ transformPerspective: 600 }}
-              >
-                <motion.span
-                  className="inline-block"
-                  style={{ transformPerspective: 600 }}
-                  animate={reduce ? { rotateY: 0 } : { rotateY: [0, -65, 0] }}
-                  transition={{
-                    duration: reduce ? 0 : 0.9,
-                    delay: 1.4 + i * 0.07,
-                    repeat: reduce ? 0 : Infinity,
-                    repeatDelay: 3.5,
-                    ease: "easeInOut",
-                  }}
-                >
-                  {char}
-                </motion.span>
-              </motion.span>
-            ))}
-          </span>
-        ))}
-      </h1>
+        {site.heroTitle}
+      </motion.h1>
 
-      <motion.div {...fade(0.9)} className="mt-6 flex flex-wrap justify-center gap-3">
+      <motion.div {...fade(0.4)} className="mt-6 flex flex-wrap justify-center gap-3">
         <a
           href="#portfolio"
           className="rounded-full bg-gold px-6 py-2.5 font-label text-xs uppercase tracking-widest text-ink transition hover:bg-parchment"
@@ -80,7 +44,7 @@ export default function Hero() {
 
       {/* Rak buku: muncul sekali, setelah itu tiap buku bergerak sendiri */}
       <motion.div
-        {...fade(0.5, 40)}
+        {...fade(0.3, 40)}
         className="relative mt-8 w-full"
         style={{ maxWidth: "min(64rem, calc((100vh - 240px) * 1.95))" }}
       >
@@ -89,7 +53,7 @@ export default function Hero() {
           <motion.div
             key={label.text}
             className="pointer-events-none absolute inset-0"
-            {...fade(1 + i * 0.08, 8)}
+            {...fade(0.7 + i * 0.08, 8)}
           >
             <div className="pointer-events-auto">
               <ShelfLabel {...label} />

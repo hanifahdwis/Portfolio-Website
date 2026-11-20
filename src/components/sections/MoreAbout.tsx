@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { motion, useScroll, useSpring } from "framer-motion";
-import { FiCheckSquare, FiFileText, FiUsers } from "react-icons/fi";
+import { motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
 import Reveal, { SectionHeading } from "@/components/ui/Reveal";
-import { interests } from "@/data/interests";
 import { journey } from "@/data/journey";
+
+const ease = [0.22, 1, 0.36, 1] as const;
 
 const focus = [
   "Software Engineering",
@@ -15,24 +15,6 @@ const focus = [
   "Full-stack",
   "Mobile",
   "Technical Project Coordination",
-];
-
-const principles = [
-  {
-    icon: FiFileText,
-    title: "Understand first",
-    text: "I like to get requirements and design clear before building. For PujaServe, I wrote the requirements (SKPL) and design (DPPL) documents covering architecture, database, and workflows.",
-  },
-  {
-    icon: FiCheckSquare,
-    title: "Verify the work",
-    text: "I back what I build with automated tests where I can, like the Jest tests for the event ticketing backend.",
-  },
-  {
-    icon: FiUsers,
-    title: "Keep the team aligned",
-    text: "I plan timelines, guidelines, and documents so everyone knows what is next, as I did with a 20-member team for  bootcamp for 300+ participants.",
-  },
 ];
 
 function Sub({ eyebrow, title }: { eyebrow: string; title: string }) {
@@ -46,24 +28,45 @@ function Sub({ eyebrow, title }: { eyebrow: string; title: string }) {
   );
 }
 
+// Foto muncul dari kanan saat di-scroll; saat di-hover lurus, naik, dan gambarnya zoom
 function Photo({ src, alt }: { src: string; alt: string }) {
+  const reduce = useReducedMotion();
   const [failed, setFailed] = useState(false);
   if (failed) return null;
   return (
-    <div className="mt-4 inline-block -rotate-2 rounded-sm bg-card p-1.5 shadow-lg transition-transform duration-300 hover:rotate-0">
-      <Image
-        src={src}
-        alt={alt}
-        width={320}
-        height={200}
-        className="h-40 w-64 object-cover"
-        onError={() => setFailed(true)}
-      />
-    </div>
+    <motion.figure
+      initial={reduce ? false : { opacity: 0, x: 40, rotate: 5 }}
+      whileInView={{ opacity: 1, x: 0, rotate: 2 }}
+      whileHover={
+        reduce
+          ? undefined
+          : {
+              rotate: 0,
+              scale: 1.05,
+              y: -6,
+              transition: { type: "spring", stiffness: 300, damping: 18 },
+            }
+      }
+      viewport={{ once: true, amount: 0.4 }}
+      transition={{ duration: 0.8, ease }}
+      className="group relative mt-5 w-full max-w-80 rounded-sm bg-card p-2 shadow-xl transition-shadow duration-300 hover:shadow-2xl lg:mt-0"
+    >
+      <div className="overflow-hidden">
+        <Image
+          src={src}
+          alt={alt}
+          width={640}
+          height={440}
+          className="h-56 w-full object-cover transition-transform duration-700 group-hover:scale-110"
+          onError={() => setFailed(true)}
+        />
+      </div>
+    </motion.figure>
   );
 }
 
 export default function MoreAbout() {
+  const reduce = useReducedMotion();
   const listRef = useRef<HTMLOListElement>(null);
   const { scrollYProgress } = useScroll({
     target: listRef,
@@ -81,8 +84,32 @@ export default function MoreAbout() {
 
         {/* Currently */}
         <Reveal>
-          <div className="grid gap-8 rounded-md border border-gold/30 bg-ink/30 p-7 sm:p-9 lg:grid-cols-[1.2fr_1fr] lg:items-center">
-            <div>
+          <motion.div
+            animate={
+              reduce
+                ? undefined
+                : {
+                    boxShadow: [
+                      "0 0 0 0 rgba(197,163,106,0)",
+                      "0 0 30px 0 rgba(197,163,106,0.22)",
+                      "0 0 0 0 rgba(197,163,106,0)",
+                    ],
+                  }
+            }
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="relative grid gap-8 overflow-hidden rounded-md border border-gold/30 bg-ink/30 p-7 sm:p-9 lg:grid-cols-[1.2fr_1fr] lg:items-center"
+          >
+            {/* Kilau yang menyapu pelan */}
+            {!reduce && (
+              <motion.span
+                aria-hidden
+                className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-gold/10 to-transparent"
+                animate={{ x: ["0%", "450%"] }}
+                transition={{ duration: 3.2, repeat: Infinity, repeatDelay: 4, ease: "easeInOut" }}
+              />
+            )}
+
+            <div className="relative">
               <p className="flex items-center gap-2.5 font-label text-[10px] uppercase tracking-[0.2em] text-gold">
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold opacity-60 motion-reduce:animate-none" />
@@ -91,100 +118,103 @@ export default function MoreAbout() {
                 Currently
               </p>
               <h3 className="mt-3 font-display text-3xl leading-snug sm:text-4xl">
-                Looking for an internship in software engineering.
+                Looking for an{" "}
+                <span className="relative inline-block text-gold">
+                  internship
+                  <motion.span
+                    aria-hidden
+                    className="absolute -bottom-1 left-0 h-0.5 w-full origin-left bg-gold"
+                    initial={reduce ? false : { scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.9, delay: 0.5, ease }}
+                  />
+                </span>{" "}
+                in software engineering.
               </h3>
               <p className="mt-3 leading-7 text-parchment/75">
                 Software Engineering student at ITS, building web and mobile projects and
                 coordinating campus tech events.
               </p>
             </div>
-            <ul className="flex flex-wrap gap-2">
-              {focus.map((f) => (
-                <li
+
+            <ul className="relative flex flex-wrap gap-2">
+              {focus.map((f, i) => (
+                <motion.li
                   key={f}
-                  className="rounded-full border border-parchment/25 px-3.5 py-1.5 text-sm"
+                  initial={reduce ? false : { opacity: 0, scale: 0.7 }}
+                  whileInView={{
+                    opacity: 1,
+                    scale: 1,
+                    transition: { delay: 0.2 + i * 0.08, type: "spring", stiffness: 300, damping: 16 },
+                  }}
+                  animate={
+                    reduce
+                      ? undefined
+                      : {
+                          y: [0, -4, 0],
+                          transition: {
+                            duration: 3 + (i % 3) * 0.6,
+                            delay: i * 0.25,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                          },
+                        }
+                  }
+                  whileHover={{
+                    scale: 1.12,
+                    transition: { type: "spring", stiffness: 500, damping: 10 },
+                  }}
+                  viewport={{ once: true }}
+                  className="cursor-default rounded-full border border-parchment/25 px-3.5 py-1.5 text-sm transition-colors duration-200 hover:border-gold hover:bg-gold hover:text-ink"
                 >
                   {f}
-                </li>
+                </motion.li>
               ))}
             </ul>
-          </div>
+          </motion.div>
         </Reveal>
-
-        {/* Interests */}
-        <div className="mt-20">
-          <Sub eyebrow="Focus" title="Interests" />
-          <ul className="grid gap-x-12 border-b border-parchment/15 sm:grid-cols-2">
-            {interests.map((it, i) => (
-              <li key={it.title}>
-                <Reveal delay={i * 0.06} y={12}>
-                  <div className="group border-t border-parchment/15 py-5">
-                    <h4 className="font-display text-xl font-semibold transition-colors duration-300 group-hover:text-gold">
-                      {it.title}
-                    </h4>
-                    <p className="mt-1.5 text-sm leading-6 text-parchment/70">
-                      {it.description}
-                    </p>
-                  </div>
-                </Reveal>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* How I work */}
-        <div className="mt-20">
-          <Sub eyebrow="Approach" title="How I Work" />
-          <ul className="grid gap-5 md:grid-cols-3">
-            {principles.map(({ icon: Icon, title, text }, i) => (
-              <li key={title}>
-                <Reveal delay={i * 0.1} y={16} className="h-full">
-                  <div className="h-full rounded-md border border-parchment/15 bg-ink/25 p-6 transition-colors duration-300 hover:border-gold/50">
-                    <span className="grid h-10 w-10 place-items-center rounded-full bg-gold/15 text-gold">
-                      <Icon size={18} />
-                    </span>
-                    <h4 className="mt-4 font-display text-xl font-semibold">{title}</h4>
-                    <p className="mt-2 text-sm leading-6 text-parchment/70">{text}</p>
-                  </div>
-                </Reveal>
-              </li>
-            ))}
-          </ul>
-        </div>
 
         {/* Journey */}
         <div className="mt-20">
           <Sub eyebrow="Timeline" title="Journey" />
           <ol ref={listRef} className="relative">
+            {/* Garis dasar: selalu terlihat, tidak ada bagian yang tampak putus */}
             <span
               aria-hidden
-              className="absolute left-1.75 top-2 h-[calc(100%-1rem)] w-px bg-parchment/20 md:left-43.75"
+              className="absolute left-1.5 top-2 h-[calc(100%-1rem)] w-0.5 bg-gold/30 md:left-[calc(10.5rem+6px)]"
             />
             <motion.span
               aria-hidden
               style={{ scaleY: fill }}
-              className="absolute left-1.75 top-2 h-[calc(100%-1rem)] w-px origin-top bg-gold md:left-43.75"
+              className="absolute left-1.5 top-2 h-[calc(100%-1rem)] w-0.5 origin-top bg-gold shadow-[0_0_10px_rgba(197,163,106,0.6)] md:left-[calc(10.5rem+6px)]"
             />
 
             {journey.map((j, i) => (
-              <li key={j.label + j.title} className="relative pb-12 pl-8 last:pb-0 md:pl-54">
+              <li
+                key={j.label + j.title}
+                className="relative pb-14 pl-8 last:pb-0 md:pl-[13.5rem]"
+              >
                 <span
                   aria-hidden
-                  className="absolute left-0 top-1.5 h-3.5 w-3.5 rounded-full border-2 border-gold bg-mahogany md:left-42"
+                  className="absolute left-0 top-1.5 h-3.5 w-3.5 rounded-full border-2 border-gold bg-mahogany md:left-[10.5rem]"
                 />
                 <p className="font-label text-xs uppercase tracking-wider text-gold md:absolute md:left-0 md:top-1.5 md:w-40 md:text-right">
                   {j.label}
                 </p>
-                <Reveal delay={0.05} y={16}>
-                  <p className="mt-2 font-label text-[10px] uppercase tracking-[0.2em] text-parchment/50 md:mt-0">
-                    Chapter {String(i + 1).padStart(2, "0")}
-                  </p>
-                  <h4 className="mt-1 font-display text-2xl font-semibold">{j.title}</h4>
-                  <p className="mt-1.5 max-w-xl text-sm leading-6 text-parchment/70">
-                    {j.description}
-                  </p>
+
+                <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-8">
+                  <Reveal delay={0.05} y={16}>
+                    <p className="mt-2 font-label text-[10px] uppercase tracking-[0.2em] text-parchment/50 md:mt-0">
+                      Chapter {String(i + 1).padStart(2, "0")}
+                    </p>
+                    <h4 className="mt-1 font-display text-2xl font-semibold">{j.title}</h4>
+                    <p className="mt-1.5 max-w-xl text-sm leading-6 text-parchment/70">
+                      {j.description}
+                    </p>
+                  </Reveal>
                   {j.photo && <Photo src={j.photo} alt={j.photoAlt ?? j.title} />}
-                </Reveal>
+                </div>
               </li>
             ))}
           </ol>

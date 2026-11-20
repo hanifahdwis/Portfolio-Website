@@ -37,7 +37,7 @@ function Pic({ src, alt, contain }: { src: string; alt: string; contain?: boolea
       src={src}
       alt={alt}
       fill
-      sizes="160px"
+      sizes="200px"
       className={contain ? "object-contain p-[1.5cqw]" : "object-cover object-top"}
       onError={() => setFailed(true)}
     />
@@ -46,9 +46,11 @@ function Pic({ src, alt, contain }: { src: string; alt: string; contain?: boolea
 
 function Field({ label, value }: { label: string; value: string }) {
   return (
-    <div>
-      <dt className="font-label text-[1.8cqw] uppercase tracking-wider text-ink/50">{label}</dt>
-      <dd className="mt-[0.5cqw] font-display text-[3.1cqw] font-semibold leading-tight">{value}</dd>
+    <div className="min-w-0">
+      <dt className="font-label text-[1.9cqw] uppercase tracking-wider text-ink/50">{label}</dt>
+      <dd className="mt-[0.8cqw] break-words font-display text-[4cqw] font-semibold leading-tight">
+        {value}
+      </dd>
     </div>
   );
 }
@@ -117,7 +119,7 @@ export default function IdentificationCard({
       whileInView={{ opacity: 1, y: 0, rotate: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      className="mx-auto w-full max-w-120"
+      className="mx-auto w-full max-w-144"
     >
       <div
         onMouseMove={onMove}
@@ -136,23 +138,23 @@ export default function IdentificationCard({
               transform: flipped ? "rotateY(180deg)" : "none",
             }}
           >
-            {/* Depan */}
+            {/* Depan: foto, nama, program studi */}
             <div className={face} style={hidden}>
               <div className="flex items-center justify-between bg-mahogany px-[4cqw] py-[2.2cqw] text-parchment">
-                <span className="font-label text-[2.2cqw] uppercase tracking-[0.25em]">Identification Card</span>
+                <span className="font-label text-[2.2cqw] uppercase tracking-[0.25em]">
+                  Identification Card
+                </span>
                 <span className="grid h-[6cqw] w-[6cqw] place-items-center rounded-full bg-parchment font-display text-[3.4cqw] font-bold text-ink">
                   {monogram}
                 </span>
               </div>
               <div className="flex flex-1 gap-[4cqw] p-[4cqw]">
-                <div className="relative w-[28%] shrink-0 overflow-hidden rounded-sm border-[0.8cqw] border-white shadow-inner">
+                  <div className="relative w-[42%] shrink-0 overflow-hidden rounded-sm border-[0.8cqw] border-white shadow-inner">
                   <Pic src={photoSrc} alt={photoAlt} />
                 </div>
-                <dl className="flex min-w-0 flex-1 flex-col justify-between">
+                <dl className="flex min-w-0 flex-1 flex-col justify-center gap-[5cqw]">
                   <Field label="Member" value={name} />
                   <Field label="Programme" value={programme} />
-                  <Field label="Institution" value={institution} />
-                  <Field label="Valid" value={period} />
                 </dl>
               </div>
               <div className="px-[4cqw] pb-[3cqw] text-mahogany/70">
@@ -160,17 +162,16 @@ export default function IdentificationCard({
               </div>
             </div>
 
-            {/* Belakang */}
+            {/* Belakang: logo di kiri, institusi dan periode di kanan */}
             <div className={face} style={{ ...hidden, transform: "rotateY(180deg)" }}>
-              <div className="mt-[5cqw] h-[10cqw] bg-ink" />
+              <div className="mt-[5cqw] h-[8cqw] bg-ink" />
               <div className="flex flex-1 items-center gap-[4cqw] p-[4cqw]">
-                <div className="relative aspect-square h-full shrink-0 overflow-hidden rounded-sm border-[0.8cqw] border-white bg-parchment/50">
+                <div className="relative h-[30cqw] w-[30cqw] shrink-0 overflow-hidden rounded-sm border-[0.8cqw] border-white bg-parchment/50">
                   <Pic src={logoSrc} alt={logoAlt} contain />
                 </div>
-                <dl className="flex min-w-0 flex-1 flex-col gap-[2.5cqw]">
+                <dl className="flex min-w-0 flex-1 flex-col justify-center gap-[5cqw]">
                   <Field label="Institution" value={institution} />
-                  <Field label="Programme" value={programme} />
-                  <Field label="Period" value={period} />
+                  <Field label="Valid" value={period} />
                 </dl>
               </div>
             </div>

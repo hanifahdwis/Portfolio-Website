@@ -7,13 +7,17 @@ import Reveal, { SectionHeading } from "@/components/ui/Reveal";
 import { projects } from "@/data/projects";
 
 const ease = [0.22, 1, 0.36, 1] as const;
+const COLLAPSED = 6; // 2 baris x 3 kolom
+
+const sorted = [...projects].sort((a, b) => Number(b.featured) - Number(a.featured));
+
+const iconLink =
+  "grid h-9 w-9 place-items-center rounded-full border border-ink/15 transition hover:border-mahogany hover:bg-mahogany hover:text-parchment";
 
 export default function Projects() {
   const [showAll, setShowAll] = useState(false);
-  const items = projects
-    .map((project, index) => ({ project, index }))
-    .filter(({ project }) => showAll || project.featured);
-  const extra = projects.filter((p) => !p.featured).length;
+  const items = showAll ? sorted : sorted.slice(0, COLLAPSED);
+  const extra = sorted.length - COLLAPSED;
 
   return (
     <section
@@ -25,7 +29,7 @@ export default function Projects() {
 
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence>
-            {items.map(({ project: p, index }, i) => (
+            {items.map((p, i) => (
               <motion.article
                 key={p.title}
                 initial={{ opacity: 0, y: 24 }}
@@ -33,55 +37,64 @@ export default function Projects() {
                 exit={{ opacity: 0, y: 12 }}
                 viewport={{ once: true, amount: 0.15 }}
                 transition={{ duration: 0.6, delay: (i % 3) * 0.08, ease }}
-                className={`flex flex-col rounded-md border-l-4 bg-card p-6 text-ink shadow-lg transition duration-300 hover:-translate-y-1.5 hover:shadow-2xl ${
-                  p.kind === "docs" ? "border-shakespeare" : "border-tolstoy"
-                }`}
+                className="group relative flex flex-col overflow-hidden rounded-xl bg-card p-6 text-ink shadow-lg ring-1 ring-transparent transition duration-300 hover:-translate-y-2 hover:shadow-2xl hover:ring-gold/70"
               >
-                <div className="flex items-center justify-between font-label text-[10px] uppercase tracking-wider text-ink/50">
-                  <span>PRJ-{p.year}-{String(index + 1).padStart(2, "0")}</span>
-                  <span>{p.kind === "docs" ? "Documentation" : "Source code"}</span>
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 top-0 h-1.5 origin-left scale-x-[0.3] bg-gradient-to-r from-tolstoy via-gold to-shakespeare transition-transform duration-500 group-hover:scale-x-100"
+                />
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -right-3 -top-5 z-0 font-display text-8xl font-bold text-ink/[0.05] transition-colors duration-300 group-hover:text-tolstoy/20"
+                >
+                  {p.year}
+                </span>
+
+                <div className="relative flex flex-1 flex-col">
+                  <h3 className="mt-2 font-display text-2xl font-semibold leading-tight">
+                    {p.title}
+                  </h3>
+                  <p className="mt-1 font-display text-base italic text-tolstoy">{p.subtitle}</p>
+                  <p className="mt-4 flex-1 text-sm leading-6 text-ink/75">{p.description}</p>
+
+                  <ul className="mt-5 flex flex-wrap gap-2">
+                    {p.tags.map((t) => (
+                      <li
+                        key={t}
+                        className="rounded-full bg-tolstoy/10 px-2.5 py-0.5 font-label text-[10px] text-mahogany"
+                      >
+                        {t}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {(p.githubUrl || p.demoUrl) && (
+                    <div className="mt-5 flex items-center gap-2 border-t border-ink/10 pt-4">
+                      {p.githubUrl && (
+                        <a
+                          href={p.githubUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          aria-label={`${p.title} on GitHub`}
+                          className={iconLink}
+                        >
+                          <FiGithub />
+                        </a>
+                      )}
+                      {p.demoUrl && (
+                        <a
+                          href={p.demoUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          aria-label={`${p.title} live demo`}
+                          className={iconLink}
+                        >
+                          <FiExternalLink />
+                        </a>
+                      )}
+                    </div>
+                  )}
                 </div>
-                <div className="my-4 h-px bg-ink/15" />
-
-                <h3 className="font-display text-2xl font-semibold leading-tight">{p.title}</h3>
-                <p className="mt-1 font-display text-base italic text-tolstoy">{p.subtitle}</p>
-                <p className="mt-4 flex-1 text-sm leading-6 text-ink/75">{p.description}</p>
-
-                <ul className="mt-5 flex flex-wrap gap-2">
-                  {p.tags.map((t) => (
-                    <li
-                      key={t}
-                      className="rounded-full border border-ink/20 px-2.5 py-0.5 font-label text-[10px]"
-                    >
-                      {t}
-                    </li>
-                  ))}
-                </ul>
-
-                {(p.githubUrl || p.demoUrl) && (
-                  <div className="mt-5 flex gap-4 border-t border-ink/10 pt-4 text-sm">
-                    {p.githubUrl && (
-                      <a
-                        href={p.githubUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex items-center gap-2 transition hover:text-tolstoy"
-                      >
-                        <FiGithub /> Code
-                      </a>
-                    )}
-                    {p.demoUrl && (
-                      <a
-                        href={p.demoUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex items-center gap-2 transition hover:text-tolstoy"
-                      >
-                        <FiExternalLink /> Demo
-                      </a>
-                    )}
-                  </div>
-                )}
               </motion.article>
             ))}
           </AnimatePresence>

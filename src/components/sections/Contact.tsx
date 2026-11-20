@@ -14,7 +14,7 @@ export default function Contact() {
       className="grain lamp layer scroll-mt-16 bg-ink px-5 py-24 text-parchment sm:px-8"
     >
       <div className="mx-auto max-w-4xl">
-        <SectionHeading eyebrow="Checkout desk" title="Contact" />
+        <SectionHeading title="Contact" />
 
         <Reveal delay={0.1}>
           <p className="max-w-xl text-lg leading-8 text-parchment/75">
